@@ -1,11 +1,11 @@
 package main
 
 import (
-	"bufio"
 	"container/heap"
 	"fmt"
-	"os"
 	"strconv"
+
+	"helper"
 )
 
 func max(a, b int) int {
@@ -17,40 +17,37 @@ func max(a, b int) int {
 
 // processElfs runs through the input file, calculates calories totals for each Elf,
 // and calls finalize with each total.
-func processElfs(finalize func(int)) error {
-	file, err := os.Open("./input")
-	if err != nil {
-		return err
-	}
-
+func processElfs(path string, finalize func(int)) error {
 	var total int
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
+	err := helper.ForEachLine(path, func(line string) error {
 		// New Elf, pass total to finalize and prepare for a new one.
-		if scanner.Text() == "" {
+		if line == "" {
 			finalize(total)
 			total = 0
-			continue
+			return nil
 		}
 
-		calories, err := strconv.Atoi(scanner.Text())
+		calories, err := strconv.Atoi(line)
 		if err != nil {
 			return err
 		}
 		total += calories
-	}
-	return scanner.Err()
+		return nil
+	})
+	finalize(total)
+
+	return err
 }
 
-func most() {
+func most(path string) int {
 	var most int
-	err := processElfs(func(total int) {
+	err := processElfs(path, func(total int) {
 		most = max(most, total)
 	})
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(most)
+	return most
 }
 
 type maxHeap []int
@@ -66,10 +63,10 @@ func (h *maxHeap) Pop() any {
 	return x
 }
 
-func topThree() {
+func topThree(path string) int {
 	h := &maxHeap{}
 	heap.Init(h)
-	err := processElfs(func(total int) {
+	err := processElfs(path, func(total int) {
 		heap.Push(h, total)
 	})
 	if err != nil {
@@ -79,11 +76,11 @@ func topThree() {
 	total := heap.Pop(h).(int)
 	total += heap.Pop(h).(int)
 	total += heap.Pop(h).(int)
-	fmt.Println(total)
+	return total
 }
 
 func main() {
-	most()
+	fmt.Println(most("./input"))
 	fmt.Println("---------")
-	topThree()
+	fmt.Println(topThree("./input"))
 }

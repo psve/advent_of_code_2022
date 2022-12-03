@@ -1,10 +1,10 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"os"
 	"strings"
+
+	"helper"
 )
 
 // round represents the two moves. 0 for rock, 1 for paper, 2 for scissors.
@@ -41,26 +41,20 @@ func fromStrategy(strategy string) round {
 	return round{opponent[s[0]], (opponent[s[0]] + you[s[1]]) % 3}
 }
 
-func totalScore(toRound func(string) round) {
-	file, err := os.Open("./input")
+func totalScore(path string, toRound func(string) round) int {
+	var total int
+	err := helper.ForEachLine(path, func(line string) error {
+		total += score(toRound(line))
+		return nil
+	})
 	if err != nil {
 		panic(err)
 	}
-
-	var total int
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		total += score(toRound(scanner.Text()))
-	}
-	if err := scanner.Err(); err != nil {
-		panic(err)
-	}
-
-	fmt.Println(total)
+	return total
 }
 
 func main() {
-	totalScore(fromMoves)
+	fmt.Println(totalScore("./input", fromMoves))
 	fmt.Println("---------")
-	totalScore(fromStrategy)
+	fmt.Println(totalScore("./input", fromStrategy))
 }
