@@ -1,3 +1,6 @@
 go 1.19
 
-use ./01_calorie_counting
+use (
+	./01_calorie_counting
+	./02_rock_paper_scissors
+)
