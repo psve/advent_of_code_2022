@@ -3,5 +3,6 @@ go 1.19
 use (
 	./01_calorie_counting
 	./02_rock_paper_scissors
+	./03_rucksack_reorganization
 	./helper
 )
