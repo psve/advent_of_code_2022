@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-func ForEachLine(path string, do func(string) error) error {
+func ForEachLine(path string, do func(line string) error) error {
 	file, err := os.Open(path)
 	if err != nil {
 		return err
