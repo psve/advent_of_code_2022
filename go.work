@@ -13,5 +13,6 @@ use (
 	./10_cathode_ray_tube
 	./11_monkey_in_the_middle
 	./12_hill_climbing_algorithm
+	./13_distress_signal
 	./helper
 )
