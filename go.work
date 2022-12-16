@@ -15,5 +15,6 @@ use (
 	./12_hill_climbing_algorithm
 	./13_distress_signal
 	./14_regolith_reservoir
+	./15_beacon_exclusion_zone
 	./helper
 )
